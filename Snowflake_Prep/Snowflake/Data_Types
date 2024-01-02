@@ -1,0 +1,60 @@
+DATA TYPES IN SNOWFLAKE : 
+
+OBJECT - Unordered set of name value pairs . 
+          
+        {
+           "topic":"Snowflake",
+           "level":"All levels"
+        }
+
+
+
+ARRAY -  Consists of 0 or more pieces of data 
+
+         [ "USA" , "India" , "Canada" ]        
+
+
+VARIANT -  Can store values of any other data type including ARRAY and OBJECT 
+           Suitable to store and query semi-structured data .
+
+           SQL nulls are just stored as "null" strings . They are called JSON null (or "VARIANT null") 
+
+           Non-native strings (e.g. dates ) are stored in strings 
+
+           Maximum length is 16 MB 
+
+
+           USE CASES : 
+                       Explicitely define hierarchy of ARRAYs and OBJECTs
+
+           Let Snowflake convert semi-structured data into hierarchy of ARRAY , OBJECT and VARIANT data stored into VARIANT . 
+
+
+           CREATE FILE FORMAT my_fileformat
+           TYPE = { JSON | AVRO | XML | PARQUET | ORC }           
+
+
+
+Loading semi-structure data 
+
+VARIANT - Native support for semi-structured data 
+
+Step 1: Load the data as it is and transform it later .   ELT Approach 
+
+Step 2: Extract & Load raw data (VARIANT)
+
+Step 3: Analyse/Parse 
+
+Step 4: Flatten 
+
+
+COPY INTO ....
+
+
+
+
+
+
+
+
+

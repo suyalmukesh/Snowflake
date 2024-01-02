@@ -1,0 +1,46 @@
+Tasks
+-----------------------
+
+Used to schedule execution of SQL statement / Stored Procedures 
+
+Often combined with streams to set up continous ETL workflows
+
+
+CREATE TASK my_task 
+WAREHOUSE = my_wh    -- Also possible with Snowflake-managed compute 
+SCHEDULE = '15 MINUTE'
+AS
+INSERT INTO .......
+
+-- Run using privileges of task OWNER 
+
+
+EXECUTE MANAGED TASK --  Account level 
+CREATE TASK  -- Schema level 
+USAGE -- Warehouse level 
+
+
+ALTER TASK my_task RESUME ;  -- WILL INITIALLY START 
+
+ALTER TASK my_task SUSPEND; 
+
+
+DAG 
+
+Limited to 
+    - 1000 tasks in total 
+    - 100 child tasks
+
+CREATE TASK my_task 
+WAREHOUSE = my_wh 
+AFTER my_task_a
+AS 
+...
+    
+
+
+A task can execute any one of the following types of SQL code: 
+Single SQL statement
+Call to a stored procedure
+Procedural logic using Snowflake Scripting.
+

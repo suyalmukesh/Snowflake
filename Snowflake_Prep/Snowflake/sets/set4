@@ -1,0 +1,221 @@
+1.  
+ACCOUNT_USAGE --> Not real time 
+As part of a security incident investigation, you need to extract the history of who logged into Snowflake during the past 1 year. 
+Which one of the following methods should you use?
+
+Query the view SNOWFLAKE.ACCOUNT_USAGE.LOGIN_HISTORY 
+
+The views in ACCOUNT_USAGE schema provide up to 365 days of history. 
+Therefore they are useful for scenarios where data for a long historical duration is required. 
+The LOGIN_HISTORY view in the ACCOUNT_USAGE schema will therefore fulfill the requirement. 
+Note: The ACCOUNT_USAGE views are not real-time and may have up to 3 hours of latency.
+
+---------------------------------------------------------------------------------------------------------------------------------------------
+2. 
+INFORMATION_SCHEMA view   -->  Real-time 
+
+True or False: Using the views in the INFORMATION_SCHEMA, you can access the history of usage that occurred 5 minutes ago.
+True : 
+The data provided via the INFORMATION_SCHEMA views is real-time, and there is no latency in the information provided. 
+So, if you are asked which schema should be used if there is a requirement to view real-time data, then the views in INFORMATION SCHEMA should be used as they contain real-time information.
+
+---------------------------------------------------------------------------------------------------------------------------------------------
+3. 
+Objects that can be shared : 
+Secure UDFs | Secure Materialized Views | Tables | Secure Views 
+
+Objects that CAN NOT be shared 
+   1.  Standard views cannot be shared. 
+   2.  Materialized Views 
+
+---------------------------------------------------------------------------------------------------------------------------------------------
+4. 
+Snowflake Marketplace : 
+      Any Snowflake account can consume or publish data to the Snowflake Marketplace.
+
+     Except for Virtual private Snowflake accounts, the Snowflake Marketplace is available to all Snowflake accounts hosted on 
+     Amazon Web Services, Google Cloud Platform, and Microsoft Azure. 
+     Any Snowflake account (again, except for VPS accounts) can become a data provider and publish datasets to the Marketplace for a cost or for free. 
+     In addition, you are required to sign up as a partner first and become an approved data provider.
+
+---------------------------------------------------------------------------------------------------------------------------------------------
+5. 
+UNLOADING FROM SNOWFLAKE : 
+
+When data is unloaded from Snowflake, it is automatically compressed using gzip compression. 
+This is the default behavior; however, you can specify alternate compression methods or turn off compression entirely. 
+The unloading process automatically exports to multiple files so that it can take advantage of the parallelism offered by Snowflake. 
+However, if needed, you can set the SINGLE parameter to true to ensure the export goes to a single file. 
+The default size of each output file is 16 MB but can be changed using the MAX_FILE_SIZE parameter. 
+The maximum allowed size per file is 5GB if you export data to cloud storage.
+
+https://docs.snowflake.com/en/user-guide/data-unload-considerations#unloading-to-a-single-file
+
+---------------------------------------------------------------------------------------------------------------------------------------------
+6. 
+INFORMATION SCHEMA does NOT include information for any dropped objects. 
+However, if the information on deleted objects is required, you must query the ACCOUNT_USAGE views. 
+
+---------------------------------------------------------------------------------------------------------------------------------------------
+7. 
+Table UDF
+   - For each input , it can return multiple rows containing multiple columns. 
+   - For each input , it can return one-row containing multiple columns. 
+   - For each input , it can return zero rows. 
+   - For each input , it can return one row containing a single column. 
+   - For each input , it can return multiple rows containiing a single columns. 
+An example of such a function can be FLATTEN which returns several rows and columns for a single input.
+
+---------------------------------------------------------------------------------------------------------------------------------------------
+8. 
+Reader Account : In Snowflake, sharing data with a non-Snowflake user (or organization) is possible by creating a reader account for that user (or organization). This reader account is created and managed by the data provider. https://docs.snowflake.com/en/user-guide/data-sharing-reader-create
+
+---------------------------------------------------------------------------------------------------------------------------------------------
+Snowflake allows which access control method ? 
+
+1. Role-based access control (RBAC)
+2. Discretionary acces control (DAC)
+
+---------------------------------------------------------------------------------------------------------------------------------------------
+Snowflake supports AVRO | ORC | JSON 
+Not support YAML | PDF 
+
+---------------------------------------------------------------------------------------------------------------------------------------------
+
+What is the minimum Snowflake edition that supports private connectivity to Snowflake?
+BUSINESS CRITICAL 
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+SCALING OUT IN SNOWFLAKE 
+
+Scaling out is accomplished through the usage of multi-cluster virtual warehouses.
+Scaling out can assist in reducing query queuing. 
+
+Typically, a virtual warehouse has a defined set of computing resources that it can use to execute queries. When queries are sent to a warehouse, the warehouse allocates the resources required for each query and begins running the queries. If there aren't enough resources to run all the queries sent to the warehouse, Snowflake queues the extra queries until the resources are available again. Snowflake provides multi-cluster virtual warehouses to overcome this issue. Multi-cluster virtual warehouses are frequently used in scenarios where the number of concurrent queries exceeds the capacity of a single virtual warehouse. When a virtual warehouse's concurrent workload exceeds its maximum capacity, additional queries are placed in the queue. Multi-cluster virtual warehouses dynamically add additional clusters based on demand to solve the queueing issue. When demand decreases, the additional clusters are decommissioned. This process is also known as scaling out or auto-scaling.
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Snowflake releases a behaviour change release at what frequency ? 
+Once a Month 
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+UDFs can be written in : 
+  SQL | JAVA | JAVA-SCRIPT | PYTHON 
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Query Result Cache reuse can be turned off using which parameter?
+USE_CACHED_RESULT 
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Very Important : 
+A virtual warehouse was started, used for 5 minutes and 15 seconds, and shut down afterward. The customer will be charged for how many seconds?
+315 seconds (not 360 seconds)
+
+Explanation: 
+Snowflake credits are billed on a per-second usage basis, which means if a virtual warehouse 
+ran for 5 minutes and 15 seconds, you would be charged for 315 seconds (5*60 + 15). 
+However, note that a minimum of 60 seconds of billing applies, so if a virtual warehouse were started and shut down within the first 1st minute, 
+a minimum of 60-second credit usage would apply.
+---
+True or False: When setting up replication for cross-cloud or cross-region data sharing, the data provider must replicate data once for each data consumer.
+False
+Only one instance of data per cloud or region must be replicated. Once the instance is replicated, more than one consumer can use this data.
+https://docs.snowflake.com/en/user-guide/secure-data-sharing-across-regions-plaforms https://docs.snowflake.com/en/user-guide/secure-data-sharing-across-regions-plaforms#data-sharing-considerations
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+When cloning a database, your current role must have which privilege (as a minimum) on the source database?
+USAGE
+
+Explanation
+To clone a table, you need SELECT privileges on the source table. 
+For cloning Pipes, Streams & Tasks, you require OWNERSHIP privileges; 
+for all other objects that can be cloned, you need the USAGE privilege.(So here we have database , thus USAGE privilege) 
+https://docs.snowflake.com/en/sql-reference/sql/create-clone#general-usage-notes
+
+Cloud Service Layer : 
+    Provides Cloning 
+    Transaction control / ACID compliance 
+    Data Sharing 
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Tri-Secret Secure Encryption :
+Which of the following keys are combined in Tri-Secret Secure encryption? Choose two.
+Snowflake-managed
+Customer-managed 
+Explanation
+Tri-Secret Secure refers to the combination of a Snowflake-managed key and a customer-managed key, which results in the creation of a composite master key to protect your data. Tri-Secret Secure requires the Business Critical edition as a minimum and can be activated by contacting Snowflake support. https://docs.snowflake.com/en/user-guide/security-encryption-manage
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Snowflake Marketplace 
+
+The Snowflake Marketplace is an online marketplace where you can purchase and sell datasets.
+Using the Snowflake Marketplace , a customer can import data from outside your company into their Snowflake instance and utilize it to enrich their data. 
+
+Snowflake Marketplace is a marketplace for finding and accessing third-party datasets made accessible by various organizations. 
+These third-party datasets are generally supplied for a fee but are occasionally made accessible for free. 
+There is no bidding, and the data sets are available to everyone (free or for a cost). 
+https://other-docs.snowflake.com/en/collaboration/collaboration-marketplace-about.html
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+ABOUT CLUSTERING :
+
+    1.  Snowflake maintains clustering metadata for the micro-partitions in a table, including:
+    2.  The total number of micro-partitions that comprise the table.
+    3.  The number of micro-partitions containing values that overlap with each other (in a specified subset of table columns).
+    4.  The depth of the overlapping micro-partitions.
+
+CLUSTERING DEPTH :
+The clustering depth for a populated table measures the average depth (1 or greater) of the overlapping micro-partitions 
+for specified columns in a table. 
+The smaller the average depth, the better clustered the table is with regards to the specified columns.
+
+Clustering depth can be used for a variety of purposes, including:
+    1.  Monitoring the clustering “health” of a large table, particularly over time as DML is performed on the table.
+    2.  Determining whether a large table would benefit from explicitly defining a clustering key.
+    3.  A table with no micro-partitions (i.e. an unpopulated/empty table) has a clustering depth of 0.
+
+Note:
+    1.  The clustering depth for a table is not an absolute or precise measure of whether the table is well-clustered. 
+        Ultimately, query performance is the best indicator of how well-clustered a table is:
+    2.  If queries on a table are performing as needed or expected, the table is likely well-clustered.
+    3.  If query performance degrades over time, the table is likely no longer well-clustered and may benefit from clustering.
+
+MONITORING CLUSTERING INFORMATION FOR TABLES : 
+To view/monitor the clustering metadata for a table, Snowflake provides the following system functions:
+ 
+    1.   SYSTEM$CLUSTERING_DEPTH
+
+    2.   SYSTEM$CLUSTERING_INFORMATION (including clustering depth)
+
+QUESTION : HOW TO FIND CLUSTERING DEPTH ?
+
+For an unpopulated table, the clustering depth is ________?  
+ZERO
+For a populated table, the clustering depth is the average depth of overlapping micro-partitions for specific columns. The clustering depth starts at 1 (for a well-clustered table) and can be a larger number. For an unpopulated table, the clustering depth is zero. https://docs.snowflake.com/en/user-guide/tables-clustering-micropartitions#label-clustering-depth
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

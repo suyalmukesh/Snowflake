@@ -1,0 +1,42 @@
+ACCOUNT_USAGE 
+Certain account usage views provide historical usage metrics. 
+The retention period for these views is 1 year (365 days). 
+In contrast, the corresponding views and table functions in the Snowflake Information Schema have much shorter retention periods, ranging from 7 days to 6 months, depending on the view.
+
+The ACCOUNT USAGE schema consists of several views that provide usage metrics and metadata information at the account level. 
+Data provided by the ACCOUNT_USAGE views is NOT real-time and refreshes typically with a lag of 45 minutes to 3 hours, depending on the view. 
+The data in these views are retained for up to 365 days.
+
+ https://docs.snowflake.com/en/sql-reference/account-usage#differences-between-account-usage-and-information-schema
+
+-----------------------------------------------------------------------------------------------------------------------------------------
+
+You need to see the history of all queries executed in the last 60 minutes. Which of the following method should you use?
+
+use the QUERY_HISTORY table function in the INFORMATION schema 
+
+The QUERY_HISTORY table function in the INFORMATION schema provides up-to-date information without latency. The QUERY_HISTORY view in ACCOUNT_USAGE schema can have 3 hours of latency, so it will not be suitable for viewing the last 60 minutes of query history. The query history page can also be used to view the history of executed queries with-in the last 14 days.
+
+
+------------------------------------------------------------------------------------------------------------------------------------------
+
+
+INFORMATION SCHEMA VS ACCOUNT USAGE SCHEMA 
+
+Using the INFORMATION_SCHEMA you can view information on account-level objects such as roles, warehouses, and databases.
+The ACCOUNT USAGE schema consists of several views that provide usage metrics and metadata information at the account level. Data provided by the ACCOUNT_USAGE views is NOT real-time and refreshes typically with a lag of 45 minutes to 3 hours, depending on the view. The data in these views are retained for up to 365 days. https://docs.snowflake.com/en/sql-reference/account-usage#differences-between-account-usage-and-information-schema
+
+
+
+How many days of historical data can you access through the views in the INFORMATION_SCHEMA schema?
+
+7 days - 6 months 
+The data in the INFORMATION_SCHEMA views is retained for a shorter period. Typical data retention in INFORMATION SCHEMA is 14 days but can be seven days for specific views and up to 6 months for usage history views. Thus, these views have retention ranging from 7 days to a maximum of 6 months, depending on the view. So typically, the views in the INFORMATION SCHEMA can be used to find more recent information. https://docs.snowflake.com/en/sql-reference/account-usage#differences-between-account-usage-and-information-schema
+
+
+
+
+HOW TO IMPLEMENT COLU MN LEVEL SECURITY ? PRACTICLES 
+
+
+

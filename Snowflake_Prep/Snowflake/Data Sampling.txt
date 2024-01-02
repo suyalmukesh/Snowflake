@@ -1,0 +1,12 @@
+Data Sampling Methods 
+
+ROW or BERNOULI method 
+
+BLOCK or SYSTEM method 
+
+select * from table 
+sample row (<p>)   p is percentage of rows 
+
+select * from table 
+sample row (<p>) seed (15) Reproducable results 
+

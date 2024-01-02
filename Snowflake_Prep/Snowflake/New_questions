@@ -1,0 +1,64 @@
+Those questions include --
+Explain Hadoop Architecture?
+What is 5 v's of big data?
+What is default replica in Hadoop? Can you increase or decrease it?
+Difference between Hadoop (Gen1) and Hadoop (Gen2)?
+What is heartbeats in hadoop? why is that important?
+Write down few Linux commands?
+What is partition, shuffling, sort in Mapreduce?
+What is Record Reader?
+Explain Sqoop Eval Command?
+Explain different optimizations used in Sqoop?
+Explain combiner in MapReduce?
+What is Yarn? Why is it used?
+Features of sqoop? Explain significance of them?
+Explain Boundary Val's Query? Explain the formula?
+Explain Modes available in Sqoop that used in job execution?
+Difference between Target Vs Warehouse directory?
+What is split by command? when it is used?
+Hive Architecture?
+Explain Transactional Processing Vs Analytical Processing?
+Difference between Hive and RDBMS?
+What is seek time in Hive?
+Difference between SQL Vs HQL?
+Explain UDF? How many types?
+What is views in hive?
+Explain Managed Table and External Table?
+Spark Architecture?
+What is transformations and actions? Name few?
+
+Intermediate to Advanced questions. Those Include --
+Explain different no.of optimizations in hive?
+Explain types of Joins?
+What is Map side Join? What is Bucket Map Join and Sort Merge Bucket join(SMB)?
+Explain SCD Types in Hive?
+Explain File-formats in hive?
+Explain CAP Theorem?
+Explain RDD? Difference between RDD Vs Dataframe vs Dataset?
+Broadcast in Spark?
+Explain Catalyst optimizer?
+Difference between client Mode vs Cluster Mode?
+Explain Cache & persist?
+Explain Spark Performance Optimizations?
+Explain Accumulators?
+
+Bonus--
+Additionally SQL and Coding questions are important. should have look at frequently asked questions before the interview.
+
+Let me know in the comment section if it helpful
+
+If you like to know to my experience with PwC then do checkout the link in comment section
+
+
+What all a Snowflake SYSADMIN role can do ?
+
+Create Warehouse 
+databases 
+Database objects 
+Can not create Roles 
+
+The usage data provided through the INFORMATION SCHEMA has a retention of how many days?
+7 days to 6 months 
+
+The ACCOUNT USAGE schema consists of several views that provide usage metrics and metadata information at the account level. Data provided by the ACCOUNT_USAGE views is NOT real-time and refreshes typically with a lag of 45 minutes to 3 hours, depending on the view. The data in these views are retained for up to 365 days.
+

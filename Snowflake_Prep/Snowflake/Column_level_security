@@ -1,0 +1,11 @@
+Column level security 
+
+   1.  Dynamic Data Masking 
+   2.  External Tokenization 
+
+Dynamic Data Masking is a Column-level Security feature that uses masking policies to selectively mask plain-text data in table and view columns at query time.
+
+External Tokenization enables accounts to tokenize data before loading it into Snowflake and detokenize the data at query runtime. Tokenization is the process of removing sensitive data by replacing it with an undecipherable token. External Tokenization makes use of masking policies with external functions.
+
+
+

@@ -1,0 +1,78 @@
+STREAMS 
+
+Record (DML - ) changes made to a table 
+
+DELETE | INSERT | UPDATE 
+
+CHANGE DATA CAPTURE 
+
+METADATA$ACTION  |  METADATA$UPDATE |  METADATA$ROW_ID
+
+
+CREATE STREAM my_stream  ON TABLE my_table 
+
+
+We can Query from the stream 
+
+SELECT * FROM my_stream 
+
+
+WE can also consume a stream and will Empties a stream 
+
+Types of streams - 
+
+STANDARD 
+
+   INSERT | UPADTE | DELETE 
+    Supports : Tables 
+               Directory tables
+               Views 
+
+APPEND-ONLY 
+
+   ONLY INSERT 
+    Supports :  Standard tables 
+                Directory tables 
+                Views 
+
+INSERT-ONLY 
+   ONLY SUPPORT INSERT ( ONly for External Tables)   
+
+
+
+
+
+Staleness
+
+Stream becomes stale when offset is outside data retension period of source table 
+
+DATA_RETENSION_TIME_IN_DAYS 
+
+Means - Unconsumed change records won't be accessible anymore 
+
+
+So , how frequently stream should be consumed 
+
+Column indicating when the stream is predicted to become stale STALE_AFTER 
+
+DESCRIBE STREAM or SHOW STREAM commmand 
+
+
+Stream extends retension to 14 days (default)  - Regardless of snowflake edition 
+
+MAX_DATA_EXTENSION_TIME_IN_DAYS 
+
+
+
+COMBINING STREAMS AND TASKS 
+
+
+CREATE TASK my_task 
+ WAREHOUSE = my_wh 
+ SCHEDULE = '15 minute'
+ WHEN SYSTEM$STREAM_HAS_DATA('my_stream')
+ AS
+ INSERT INTO ...
+
+
+ 

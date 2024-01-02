@@ -1,0 +1,39 @@
+-- *****************************************************************
+
+-- 1 : CREATE A DATABASE AND SCHEMA 
+CREATE OR REPLACE DATABASE MANAGE_DB;
+CREATE OR REPLACE SCHEMA MANAGE_DB.EXTERNAL_STAGES;
+
+--2 : CREATE STORAGE INTEGRATION OBJECT 
+
+CREATE OR REPLACE STORAGE INTEGRATION azure_integration
+   TYPE = EXTERNAL_STAGE
+   STORAGE_PROVIDER = AZURE
+   ENABLED = TRUE
+   AZURE_TENANT_ID = '4d2b6e3f-8abd-46be-861f-ff1d033d6280'
+   STORAGE_ALLOWED_LOCATIONS = ('azure://suyaljisnowflake.blob.core.windows.net/csvcontainer','azure://azuresnowflakecoupling.blob.core.windows.net/snowflakelearning','azure://azuresnowflakecoupling.blob.core.windows.net/timetravel')
+
+-- 2.1 : NOTE   AZURE_CONSENT_URL AND AZURE_MULTI_TENANT_APP_NAME 
+
+DESC STORAGE INTEGRATION azure_integration;
+
+-- 3 : CREATE A FILE FORMAT FOR CSV    
+CREATE OR REPLACE FILE FORMAT MANAGE_DB.PUBLIC.FLEFORMAT_AZURE
+  TYPE = CSV
+  FIELD_DELIMITER = ','
+  SKIP_HEADER=1;
+
+ -- 4 : CREATE A STAGE USING STORAGE INTEGRATION OBJECT AND FILE FORMAT  
+   
+CREATE OR REPLACE STAGE MANAGE_DB.EXTERNAL_STAGES.AZURE_STAGE 
+  STORAGE_INTEGRATION = azure_integration
+  URL = 'azure://azuresnowflakecoupling.blob.core.windows.net/snowflakelearning'
+  FILE_FORMAT = FLEFORMAT_AZURE;
+
+-- 5 : SHOW ALL THE STAGES 
+SHOW STAGES;
+
+-- 6 : LIST THE OBJECTS INSIDE THE STAGE 
+LIST @MANAGE_DB.EXTERNAL_STAGES.AZURE_STAGE 
+
+SELECT $1,$2,$3,$4,$5 FROM @MANAGE_DB.EXTERNAL_STAGES.AZURE_STAGE ;

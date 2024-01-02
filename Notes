@@ -1,0 +1,16 @@
+Explanation
+The following strategies may be applied to improve the performance of a virtual warehouse.
+
+
+
+1. Reduce queuing
+
+2. Resolve memory spillage.
+
+3. Increase warehouse size.
+
+4. Try query acceleration.
+
+5. Optimize the warehouse cache.
+
+6. Limit concurrently running queries.

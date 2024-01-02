@@ -1,0 +1,36 @@
+Explanation
+-----------------------------------
+Snowflake supports four different table types: 
+
+Permanent Table  | Temporary Table |  Transient Table | External Table. 
+
+
+1. Permanent Table: It persists until dropped. It is designed for data requiring the highest data protection and recovery level and is the default table type. Permanent Tables can be protected by up to 90 days of time travel with Enterprise Edition or above. Moreover, the failsafe is covered on all the Permanent Tables.     
+
+      CREATE TABLE EMPLOYEE (ID NUMBER , NAME VARCHAR(50));
+
+
+2. Temporary Table: A Temporary table is tied to a specific session, which means it is tied to a single user. 
+   Temporary tables are used for things like materializing subquery. 
+   You can only cover temporary tables by up to one day of time travel, and they are not covered by a failsafe.     
+
+      CREATE TEMPORARY TABLE EMPLOYEE (ID NUMBER , NAME VARCHAR(50)); 
+
+
+3. Transient Table: A Transient table is essentially a temporary table that more than one user can share because multiple users share a transient table. 
+   You have to drop it when you are finished with it, and it also is only covered by up to one day of time travel and is not covered by a failsafe. 
+   NOTE - WE CAN ALSO HAVE TRANSIENT DATABASES AND SCHEMAS.     
+
+      CREATE TRANSIENT TABLE EMPLOYEE (ID NUMBER , NAME VARCHAR(50));
+
+4. External Table: An External Table is used to access data in a data lake. 
+   It is always read-only because it is based on files that live outside of Snowflake and are not managed by Snowflake, 
+   and Time Travel and Failsafe do not cover it.
+
+      CREATE EXTERNAL TABLE EMPLOYEE 
+          WITH LOCATION = @my_staged_location
+          FILE_FORMAT = (TYPE = CSV SKIP HEADER = 1)
+          PATTERN='.*employee.*[.]csv';
+
+
+    

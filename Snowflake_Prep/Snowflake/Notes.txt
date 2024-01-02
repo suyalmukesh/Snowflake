@@ -1,0 +1,4 @@
+A database is not part of a schema. 
+It is the other way around. 
+A schema organizes and structures a database and can contain different objects like tables and views.
+

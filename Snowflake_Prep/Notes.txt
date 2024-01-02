@@ -1,0 +1,226 @@
+A database is not part of a schema. It is the other way around. A schema organizes and structures a database and can contain different objects like tables and views.
+
+snowsql -a jh91203.us-east-2.aws
+
+
+**************************************************************************
+STAGES 
+
+INTERNAL - Snowflake managed 
+           Cloud provider storage 
+           Upload file before load  (PUT command using snowsql)
+           Data will be compressed (.gz file ending)
+           AUTO_COMPRESS = TRUE 
+           gzip is the default 
+           Also data will be automatically encrypted (128-bit or 256-bit keys )
+
+           For downloading we use GET 
+
+           3 types :                   
+                User stages 
+                        Tied to a user 
+                        Cannot be accessed by other users 
+                        Every user has default stage 
+                        Cannot be altered or dropped 
+                        Put files to that stage before loading
+                        Expilicitly remove files again 
+                        Loading to multiple tables
+                        Referred to with '@~' 
+
+                Table stages
+                        Automatically created with a table 
+                        Can only be accessed by one table 
+                        Cannot be altered or dropped
+                        Load to one table
+                        Referred to with '@%TABLE_NAME'
+
+                Internal named stages 
+                        Most flexible as we create this 
+                        CREATE STAGE ... 
+                        Snowflake database object 
+                        Everyone with privileges can access it
+                        Referred to with '@STAGE_NAME'
+
+                        
+USE CASE : Suppose we have a table in Local System , we would like to load this file to multiple tables 
+           and finally would like to download . 
+
+            STEPS : 
+                   1.  Connect to SnowSQL 
+                   2.  Put files to stage : PUT command --> user stage 
+                   3.  Copy into multiple tables .. using COPY INTO ... 
+                   4.  Process data 
+                   5.  Copy into Stage 
+                   6.  GET files from stage 
+
+
+
+
+
+EXTERNAL - External Cloud provider 
+           AWS S3 | Google Cloud Storage (GCP)  | Azure Container (Azure)
+
+           CREATE STAGE .... Note - This is similar to Internal stage , just the location is added here 
+
+           Snowflake Database Object 
+           Everyone with privileges can access it 
+           Referred to with '@STAGE_NAME'
+           Reefrences external storage location 
+
+           We can have many options : 
+
+           CREATE STAGE <stage_name>
+           URL = "s3://..."
+           CREDENTIALS = ... 
+           FILE_FORMAT = ...
+
+           But this is NOT the good way . The recommended way is to store the CREDENTIALS in a seperate snowflake object called as Snowflake Integration Object 
+
+           CREATE STAGE <stage_name>
+           URL = 's3://...'
+           STORAGE_INTEGRATION = ... 
+           FILE_FORMAT = ..
+ 
+
+SOME COMMANDS : 
+
+       LIST COMMAND - List all files and additional properties 
+
+       LIST @STAGE_NAME;  For external and internal named STAGES
+       LIST @~;
+       LIST @%TABLE_STAGE_NAME; 
+
+       COPY FROM Stage 
+       COPY INTO TABLE_NAME FROM @STAGE_NAME; 
+
+       COPY TO Stage 
+       COPY INTO @STAGE_NAME FROM @TABLE_NAME; 
+
+       Directly Query from Stage
+       SELECT * FROM @STAGE_NAME;
+
+       Table Stage
+       SELECT $1,$2,$3..... FROM @STAGE_NAME;
+
+       PUT Command :
+       PUT file:///Users/mukesh/desktop/data/emp.csv @my_stage;
+
+
+************************************************************************************************************
+
+INTEGRATION OBJECT 
+---------------------
+STORAGE INTEGRATION : Stores a generated Identity for external cloud storage 
+CREATE SNOWFLAKE OBJECT : Contains ALLOWED_LOCATIONS 
+GRANT PERMISSIONS IN CLOUD PROVIDER : Allow it as Enterprise Application 
+ASSIGN ROLE IN CLOUD PROVIDER : Grant PERMISSIONS
+USE IT IN STAGE : Connect it to stage object 
+
+
+CREATE OR REPLACE STAGE SUYALMUKESH.SCHEMA.AZURE_SF_INTEGRATION_OBJECT
+    URL = 'azuresnowflakecoupling.blob.core.windows.net/snowflakelearning'
+
+
+
+
+
+
+
+
+
+
+
+******************************************************************************************************************
+
+COPY OPTIONS 
+
+1. Load Specific Files 
+     
+    COPY INTO <table_name>
+    FROM externalstage
+    FILES = ('file_name1','file_name2')
+    ON_ERROR = CONTINUE 
+
+
+2. Load with pattern 
+
+    COPY INTO TABLE_NAME
+    FROM @STAGE_NAME
+    PATTERN = .*sales.*;
+
+3. Load with Copy Options 
+
+    COPY INTO TABLE_NAME
+    FROM @STAGE_NAME
+    FILES = file_name1,file_name2,......
+    CopyOptions;
+
+
+4. File Formats
+
+    Three options - 
+        ** Define file format properties in COPY command 
+        ** Define file format properties in stage 
+        ** Define file format properties in seperate file format object and use it in stage 
+
+
+    COPY INTO TABLE_NAME
+    FROM @STAGE_NAME
+    FILE_FORMAT = ( FORMAT_NAME = 'file_format_name'  |
+                    TYPE = CSV | JSON | AVRO | ORC | PARQUET | XML )
+
+
+
+
+
+CONTINUE   :  Continue loading file if errors are found
+SKIP_FILE  :  Skip file if errors are found
+SKIP_FILE_<num>  :  SKIP_FILE_10 : Skip file when # errors >= 10
+SKIP_FILE_<num>% :  SKIP_FILE_10% : Skip file when =# errors >= 10%
+
+
+
+
+
+
+
+
+
+
+AZURE_CONSENT_URL 
+https://login.microsoftonline.com/ad18fb6c-7c9f-48b9-a461-858423dd6c62/oauth2/authorize?client_id=9eb89adb-b631-484f-ac6b-91610627076c&response_type=code
+
+
+
+AZURE_MULTI_TENANT_APP_NAME
+9aexpgsnowflakepacint_1684515868072
+
+******************************************************************************
+FILE FORMAT 
+
+Many of the properties are bit common between File Fomat properties and Stage properties 
+
+CREATE FILE FORMAT <file format name>
+TYPE = CSV
+FIELD_DELIMITER = ','
+SKIP_HEADER=1;
+
+NOW when we will create Stage , we can refer the above file format as -
+
+CREATE STAGE <stage name>
+URL = '<location>'
+FILE_FORMAT = (FORMAT_NAME = <fileformatname>);
+
+Finally we say - 
+COPY INTO <table_name>
+FROM @<stage_name>
+
+We can also overrule the above file formats as usng directly in COPY command - 
+COPY INTO <table_name>
+FROM @<stage_name>
+FILE_FORMAT = (TYPE = CSV...)
+
+
+
+
+

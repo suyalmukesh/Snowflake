@@ -1,0 +1,16 @@
+What is a directory table ? 
+
+Stores metadata of staged files : 
+
+    Layered on a stage 
+    Can be queried with sufficient privileges (on stage)
+    Retrieve file URLs to access files 
+    Needs to be enabled for stages 
+
+
+CREATE STAGE stage_azure 
+URL = <'url'>
+STORAGE_INTEGRATION = STORAGE_INTEGRATION_object
+DIRECTORY = (ENABLE = TRUE)
+-- DEFAULT = FALSE 
+

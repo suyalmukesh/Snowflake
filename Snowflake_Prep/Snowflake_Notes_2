@@ -1,0 +1,344 @@
+SNOWFLAKE NOTES : 
+
+1. 
+
+Shares are named Snowflake objects that encapsulate all of the information required to share a database. 
+
+Each share consists of:
+        The privileges that grant access to the database(s) and the schema containing the objects to share.
+        The privileges that grant access to the specific objects in the database.
+        The consumer accounts with which the database and its objects are shared. 
+
+Example: 
+
+        CREATE SHARE "SHARED_DATA" COMMENT=''; 
+        GRANT USAGE ON DATABASE "DEMO_DB" TO SHARE "SHARED_DATA"; 
+        GRANT USAGE ON SCHEMA "DEMO_DB"."TWITTER_DATA" TO SHARE "SHARED_DATA"; 
+        GRANT SELECT ON VIEW "DEMO_DB"."TWITTER_DATA"."FOLLOWERS" TO SHARE "SHARED_DATA";
+
+
+-------------------------------------------------------------------------------------------------------------
+2. 
+
+When deciding whether to suspend a warehouse or leave it running, what should you consider?
+Consider the trade-off between saving credits by suspending a warehouse versus maintaining the cache of data from previous queries to help with performance.
+
+-------------------------------------------------------------------------------------------------------------
+3. 
+
+SQL functions Snowflake supports 
+
+SYSTEM | WINDOW | TABLE | AGGREGATE | USER-DEFINED | SCALAR 
+
+-------------------------------------------------------------------------------------------------------------
+4. 
+
+Snowflake Query history page allows you to view the details of all the queries executed in the last 14 days.
+You can query the QUERY_HISTORY view in Snowflake's ACCOUNT USAGE schema for older queries.
+
+-------------------------------------------------------------------------------------------------------------
+
+5. 
+SNOWGRID's capabilities
+What is SNOWGRID ?
+Snowgrid is a platform where you can share and collaborate easily without ETL, and all with a single copy of your data! Break down data silos to instantly access data. Discover and share governed data between teams, business units, partners, customers, and more.
+It comes with sophisticated cross-cloud governance controls and flexible policies to ensure Snowflake’s modern data sharing and collaboration is secure. Policies follow the data to simplify governance at scale, while unlocking more value from even sensitive and regulated data.
+Maintain new levels of business continuity with cross-cloud and cross-region connectivity, so you can operate without disruption and deliver better customer experiences. Comply with regional and industry data regulations so you can operate locally and globally to grow and serve your business.
+Discover and access the most relevant data at your fingertips with Snowflake Data Marketplace. Enrich your insights with third-party data, connect with thousands of Snowflake customers, and extend your workflows with data services and third-party functions.
+
+
+Snowgrid allows you to use Secure Data Sharing features to provide access to live data, without any ETL or movement of files across environments.
+
+            1.  SECURE , GOVERENED DATA SHARING 
+            2.  SHARE internally with private data exchange or externally with public data exchange 
+            3.  Live , ready to query data 
+
+-------------------------------------------------------------------------------------------------------------
+6. 
+TIME TRAVEL : 
+Time Travel cannot be disabled for an account. 
+A user with the ACCOUNTADMIN role can set DATA_RETENTION_TIME_IN_DAYS to 0 at the account level, which means that all databases (and subsequently all schemas and tables) created in the account have no retention period by default; however, this default can be overridden at any time for any database, schema, or table.
+
+-------------------------------------------------------------------------------------------------------------
+7. 
+DIRECTORY TABLE :
+
+A Directory table is not a separate database object; 
+  It stores a catalog of staged files in cloud storage. 
+  Roles with sufficient privileges can query a directory table to retrieve file URLs to access the staged files and other metadata. 
+  A directory table can be added explicitly to a stage when the stage is created (using CREATE STAGE) or later (using ALTER STAGE) with supplying directoryTableParams. 
+
+ directoryTableParams (for internal stages) ::= [ DIRECTORY = ( ENABLE = { TRUE | FALSE } [ REFRESH_ON_CREATE = { TRUE | FALSE } ] ) ] ENABLE = TRUE | FALSE Specifies whether to add a directory table to the stage. When the value is TRUE, a directory table is created with the stage.
+
+DEMO : Create Directory table and other operations 
+
+
+-------------------------------------------------------------------------------------------------------------
+8. 
+
+Secure Data Sharing enables sharing selected objects in a database in your account with other Snowflake accounts. The following Snowflake database objects can be shared: 
+
+Tables 
+External tables 
+Secure views 
+Secure materialized views 
+Secure UDFs 
+Snowflake enables the sharing of databases through shares created by data providers and “imported” by data consumers.
+
+
+-------------------------------------------------------------------------------------------------------------
+9. 
+DATABASE and SHARE replication are available in all editions, including the Standard edition. 
+Replication of all other objects is only available for Business Critical Edition (or higher).
+
+-------------------------------------------------------------------------------------------------------------
+10. 
+select * from t1 sample row(100); What would the above query return?
+
+Return an entire table, including all rows in the table. The sampling method is optional. If no method is applied after the sample keyword, the default it takes is BERNOULLI.
+
+-------------------------------------------------------------------------------------------------------------
+11. 
+
+Dynamic Data Masking is supported by 
+Business Critical | VPS | Enterprise Edition 
+Dynamic Data Masking features require Enterprise Edition (or higher)
+
+READ and DEMO  : What is Dynamic Data Masking 
+-------------------------------------------------------------------------------------------------------------
+
+12. 
+Materialized View: A materialized view is more like a table. Unlike a standard or secure view, Snowflake runs the query right away when you create a materialized view. It takes the results set and stores that result set as a TABLE in Snowflake. 
+Because Snowflake is storing that materialized view as a table, creating micro partitions. Snowflake is creating metadata about those micro partitions. So when you query a materialized view, if you put a filter on the view, you get the same benefit of micro partition pruning that you would get from a table. With Snowflake, the materialized view is automatically refreshed every time there is a transaction against the base table. So it is always going to be in sync. If you want, you can also create a secure materialized view, which again will hide the logic from the user. A note about materialized views, because Snowflake is auto-refreshing them in the background, they use some credits, so there is a little bit of a cost there. Moreover, there is some storage, and Snowflake stores the result set as a table in Snowflake. So materialized views use more storage and compute than standard or secure views.
+
+-------------------------------------------------------------------------------------------------------------
+
+13. 
+
+Table Clustering 
+
+    1.  Snowflake recommends a maximum of three or four columns (or expressions) per key 
+    2.  Tables in multi-terabytes range are good candidate for clustering keys 
+    3.  Clustering keys are not for every table 
+
+Clustering keys are not for every table. Tables in the multi-terabyte range are good candidates for clustering keys. Both automatic clustering and reclustering consume credit. A single clustering key can contain one or more columns or expressions. Snowflake recommends a maximum of three or four columns (or expressions) per key for most tables. Adding more than 3-4 columns tends to increase costs more than benefits.
+
+-------------------------------------------------------------------------------------------------------------
+14. 
+
+Search optimization is a table-level property and applies to all columns with supported data types. The search optimization service aims to significantly improve the performance of selective point lookup queries on tables. A point lookup query returns only one or a small number of distinct rows. A user can register one or more tables to the search optimization service.
+
+-------------------------------------------------------------------------------------------------------------
+
+15. 
+
+Snowflake uses HyperLogLog to estimate the approximate number of distinct values in a data set. HyperLogLog is a state-of-the-art cardinality estimation algorithm, capable of estimating distinct cardinalities of trillions of rows with an average relative error of a few percent.
+
+-------------------------------------------------------------------------------------------------------------
+
+16. 
+
+Snowflake is available in four editions: 
+
+Standard | Enterprise |  Business Critical | Virtual Private Snowflake (VPS) 
+
+Standard comes with most of the available features. 
+Enterprise adds on to Standard with things like: extra days of time travel, materialized view support, and data masking. 
+Business Critical brings to the table: HIPAA support, Tri-secret Secure, and more. 
+And Virtual Private Snowflake is everything that Business Critical has, but with the ability to have customer-dedicated metadata stores and customer-dedicated virtual service.
+
+-------------------------------------------------------------------------------------------------------------
+17. 
+
+Snowflake manages all aspects of how this data is stored — the organization, file size, structure, compression, metadata, statistics, and other aspects of data storage are handled by Snowflake. The data objects stored by Snowflake are not directly visible nor accessible by customers; they are only accessible through SQL query operations run using Snowflake.
+
+-------------------------------------------------------------------------------------------------------------
+18. 
+
+Services managed by Snowflake's cloud services layer - 
+
+1. Authentication
+2. Access Control 
+3. Infrastructure Management 
+4. Query Parsing and Optimization
+5. Metadata Management 
+
+-------------------------------------------------------------------------------------------------------------
+19. 
+
+Defining clustering keys for very large tables (in the multi-terabyte range) helps optimize table maintenance and query performance. Small tables are not a good candidate for clustering.
+
+-------------------------------------------------------------------------------------------------------------
+
+20. 
+Snowflake has three types of cache.
+
+METADATA CACHE  |   DATA CACHE or LOCAL DISK CACHE   |   QUERY RESULT CACHE 
+
+The metadata cache that lives in the cloud services layer.
+
+The data cache/local disk cache that lives on the SSD drives in the virtual warehouses, and
+
+The query result cache. If a result is small, it will be stored in the cloud services layer, but larger results are going to be stored in the storage layer.
+
+-------------------------------------------------------------------------------------------------------------
+21. 
+
+User-managed Tasks is recommended when you can fully utilize a single warehouse by scheduling multiple concurrent tasks to take advantage of available compute resources. Also, recommended when adherence to the schedule interval is less critical. 
+Serverless Tasks is recommended when you cannot fully utilize a warehouse because too few tasks run concurrently or they run to completion quickly (in less than 1 minute). Also, recommended when adherence to the schedule interval is critical.
+
+-------------------------------------------------------------------------------------------------------------
+22. 
+
+GET_ABSOLUTE_PATH returns the absolute path of a staged file using the stage name and path of the file relative to its location in the stage as inputs.
+
+-------------------------------------------------------------------------------------------------------------
+23.
+
+BUILD_STAGE_FILE_URL generates a Snowflake-hosted file URL to a staged file using the stage name and relative file path as inputs. A file URL permits prolonged access to a specified file. That is, the file URL does not expire. File URL: URL that identifies the database, schema, stage, and file path to a set of files. A role that has sufficient privileges on the stage can access the files.
+
+-------------------------------------------------------------------------------------------------------------
+24. 
+
+A user cannot view the result set from a query that another user executed. This behavior is intentional. For security reasons, only the user who executed a query can access the query results. This behavior is not connected to the Snowflake access control model for objects. Even a user with the ACCOUNTADMIN role cannot view the results for a query run by another user.
+
+-------------------------------------------------------------------------------------------------------------
+25. 
+
+The expiration period of Scoped URL: The URL expires when the persisted query result period ends.
+
+The expiration period of the File URL: It is permanent.
+
+The expiration period of Pre-Signed URL: Length of time specified in the expiration_time argument.
+
+-------------------------------------------------------------------------------------------------------------
+26. 
+
+Multi-cluster warehouses are best utilized for scaling resources to improve concurrency for users/queries. They are not as beneficial for improving the performance of slow-running queries or data loading. For these types of operations, resizing the warehouse provides more benefits.
+
+-------------------------------------------------------------------------------------------------------------
+27. 
+There are two different scaling policies, one is the standard policy, and one is the economy policy.
+
+-------------------------------------------------------------------------------------------------------------
+28. 
+Adding a stream to a table appends three metadata columns: METADATA$ACTION, METADATA$ISUPDATE, METADATA$ROW_ID.   
+These columns track the CDC records and their type:  appends,  deletes, or both (updates = inserts + deletes).
+
+METADATA$ACTION - Indicates the DML operation (INSERT, DELETE) recorded.
+
+METADATA$ISUPDATE - Indicates whether the operation was part of an UPDATE statement. 
+
+METADATA$ROW_ID - Specifies the unique and immutable ID for the row, which can be used to track changes to specific rows over time. 
+
+-------------------------------------------------------------------------------------------------------------
+29. 
+
+Virtual Warehouse Privileges:
+
+OPERATE - Enables changing the state of a warehouse (stop, start, suspend, resume). In addition, enables viewing current and past queries executed on a warehouse and aborting any executing queries.
+
+MODIFY - Enables altering any properties of a warehouse, including changing its size. Required assigning a warehouse to a resource monitor. Note that only the ACCOUNTADMIN role can assign warehouses to resource monitors. 
+
+MONITOR - Enables viewing of current and past queries executed on a warehouse as well as usage statistics on that warehouse.   
+
+USAGE - Enables using a virtual warehouse and, as a result, executing queries on the warehouse. If the warehouse is configured to auto-resume when a SQL statement (e.g. query) is submitted to it, the warehouse resumes automatically and executes the statement. 
+
+OWNERSHIP - Grants full control over a warehouse. Only a single role can hold this privilege on a specific object at a time. 
+
+ALL [ PRIVILEGES ] - Grants all privileges, except OWNERSHIP, on the warehouse.
+
+-------------------------------------------------------------------------------------------------------------
+30. 
+You have a table t1 with a column j that gets populated by a sequence s1. 
+s1 is defined to start from 1 and with an increment of 1. 
+create or replace sequence s1 start = 1 increment = 1 ; 
+create or replace table t1 ( i int, j int default s1.nextval ); 
+You inserted 3 records in table t1: insert into t1 values (1,s1.nextval), (2,s1.nextval), (3,s1.nextval); 
+
+After that insert statement, you altered the sequence s1 to set the increment to -4: alter sequence s1 set increment = -4; 
+
+You again inserted 2 records in table t1: insert into t1 values (4,s1.nextval), (5,s1.nextval); 
+
+What would be the result of the following query? select j from t1 where i = 4;
+
+1 2
+2 3
+3 4 
+4 -1
+5 -5
+
+-------------------------------------------------------------------------------------------------------------
+
+31. 
+John has a SECURITYADMIN role. 
+He created a custom DBA_ROLE.  
+He granted the SYSADMIN role to DBA_ROLE. 
+He created a user, 'Monica'. 
+John then granted DBA_ROLE to Monica.
+Monica creates a Database Monica_DB. 
+Monica then created a Table T1 in Monica_DB under the PUBLIC schema. 
+
+Question : What should John do to access Table T1, created by Monica?
+
+Answer : It does not matter if John has created the DBA_ROLE. If John wants to access the object created by DBA_ROLE, he needs to grant DBA_ROLE to himself.
+
+GRANT ROLE DBA_ROLE TO JOHN ;
+USE ROLE DBA_ROLE;
+USE DATABASE Monica_db;
+Select * from t1;
+-------------------------------------------------------------------------------------------------------------
+32. 
+The views in the ACCOUNT_USAGE schema provide up to 365 days of history for various information. The history of queries from 7 months ago can only be retrieved using the QUERY_HISTORY view in the ACCOUNT_USAGE schema. The QUERY HISTORY table function in the INFORMATION schema can only provide seven days of history. The query history page can only show the history of executed queries within the last 14 days. https://docs.snowflake.com/en/sql-reference/account-usage#differences-between-account-usage-and-information-schema
+
+------------------------------------------------------------------------------------------------------------
+
+33. 
+As an administrator, you are required to find and list all tables with a size greater than 1 TB. 
+You must also include tables created and deleted in the last month. 
+Which one of the following options should you use?
+
+Query the views in the ACCOUNT_USAGE schema 
+
+-------------------------------------------------------------------------------------------------------------
+
+PRACTICLE : To do : 
+
+Create Lateral view 
+
+How can you produce a lateral view of a VARIANT, OBJECT or ARRAY Column?
+
+FLATTEN
+
+SELECT * FROM TABLE(FLATTEN(input => parse_json('[]'), outer => true)) f;
+
+
+-------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,23 @@
+SYSADMIN : 
+
+     A user with the SYSADMIN role can create a new virtual warehouse 
+     A user with the SYSADMIN role can create a new database.
+     A user with SYSADMIN role does not have the privileges to create new users or roles.
+
+USERADMIN 
+     Create New Roles and Users 
+
+
+-------------------------------------------------------------------------------------
+
+What is the number of Nodes in 6X-Large Virtual Warehouse ? 
+6 
+
+6X-Large , the largest cluster configuration (at the moment) , has 512 nodes . 
+
+The easy way to calculate is from the Large Size , which has 8 nodes . 
+
+6X-Large means Large doubled in size 6 times ,
+    8 *(2*2*2*2*2*2)  = 8 * 64  = 512
+
+-------------------------------------------------------------------------------------
